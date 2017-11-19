@@ -1,7 +1,11 @@
 <template>
   <div>
     <mt-header title="首页" fixed></mt-header>
-    <topic-list/>
+    <topic-list
+      :topicList="topicList"
+      @topLoading="topLoadingHandler"
+      @bottomLoading="bottomLoadingHandler"
+    />
     <mt-tabbar v-model="tab" fixed>
       <mt-tab-item id='all'>
         <img v-if="tab === 'all'" slot="icon" src="../assets/all_active.png">
@@ -34,45 +38,67 @@
 
 <script>
   import {mapState, mapMutations} from 'vuex';
-  import {Header, Tabbar, TabItem, Button} from 'mint-ui';
+  import {Header, Tabbar, TabItem, Button, Indicator} from 'mint-ui';
   import TopicList from './TopicList.vue';
+  import {getTopicsList} from '../api'
+  import {TAB} from '../constant';
 
   export default {
     name: 'Home',
     components: {
-      TopicList,
       'mt-header': Header,
       'mt-tabbar': Tabbar,
       'mt-tab-item': TabItem,
       'mt-button': Button,
       'topic-list': TopicList
     },
+    data: function () {
+      return {
+        tab: TAB.ALL,
+        topicList: []
+      }
+    },
     methods: {
       ...mapMutations('topic',[
         'changeTab'
-      ])
+      ]),
+      topLoadingHandler: async function(cb){
+        const data = await getTopicsList(0, this.tab, this.limit, this.mdrender);
+        this.topicList = [...data.data];
+        cb();
+      },
+      bottomLoadingHandler: async function (cb) {
+        const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
+        this.topicList.push(...data.data);
+        cb();
+      }
     },
     computed: {
-      page: {
-        get: function () {
-          return this.$store.state.topic.page;
-        },
-        set: function () {
-
-        }
-      },
-      tab: {
-        get: function () {
-          return this.$store.state.topic.tab;
-        },
-        set: function (tab) {
-          this.changeTab(tab);
-        }
+      page: function () {
+        return this.topicList.length;
       },
       ...mapState('topic',{
         limit: state => state.limit,
         mdrender: state => state.mdrender
       })
+    },
+    watch: {
+      tab: async function (){
+        const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
+        if(data.success){
+          this.topicList = data.data;
+        }else {
+          console.log('出错了');
+        }
+      }
+    },
+    beforeMount: async function () {
+      const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
+      if(data.success){
+        this.topicList = data.data;
+      }else {
+        console.log('出错了');
+      }
     }
   }
 </script>

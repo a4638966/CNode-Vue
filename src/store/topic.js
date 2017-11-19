@@ -3,8 +3,6 @@ import {TAB, MUTATION_TYPES} from '../constant'
 const topic = {
   namespaced: true,
   state: {
-    tab: TAB.ALL,
-    page: 0,
     limit: 20,
     mdrender: false
   },

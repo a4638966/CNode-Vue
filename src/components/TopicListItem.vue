@@ -1,16 +1,16 @@
 <template>
-  <div className="postItem">
-    <h3>{title}</h3>
-    <div className="content">
-      <img src=""/>
-      <div className="info">
-        <div className="detail">
-          <span>{author.loginname}</span>
-          <span><b>{reply_count}</b>/{visit_count}</span>
+  <div class="postItem">
+    <h3 class="title">{{title}}</h3>
+    <div class="content">
+      <img class="avatar" :src="author_url"/>
+      <div class="info">
+        <div class="detail">
+          <span>{{author_name}}</span>
+          <span><b>{{reply_count}}</b>/{{visit_count}}</span>
         </div>
-        <div className="time">
-          <span>{getRelativeTime(create_at)}</span>
-          <span>{getRelativeTime(last_reply_at)}</span>
+        <div class="time">
+          <span>{{create_time}}</span>
+          <span>{{last_reply_time}}</span>
         </div>
       </div>
     </div>
@@ -19,7 +19,10 @@
 
 <script>
 
-  import _ from 'lodash'
+  import _ from 'lodash';
+  import moment from 'moment'
+  import 'moment/locale/zh-cn'
+  moment.locale('zh-cn')
 
   export default {
     name: 'TopicListItem',
@@ -32,8 +35,30 @@
       last_reply_at: String,
       author: {
         validator: function (value) {
-          return value.hasOwnProperty('loginname')
+          return value !== undefined && value.hasOwnProperty('loginname')
             && value.hasOwnProperty('avatar_url')
+        }
+      }
+    },
+    computed: {
+      create_time: function () {
+        return moment(this.create_at).fromNow()
+      },
+      last_reply_time: function () {
+        return moment(this.last_reply_at).fromNow()
+      },
+      author_name: function () {
+        if(!this.author){
+          console.log('author is null')
+        }else {
+          return this.author.loginname;
+        }
+      },
+      author_url: function () {
+        if(!this.author){
+          console.log('author is null')
+        }else {
+          return this.author.avatar_url;
         }
       }
     }
@@ -41,6 +66,64 @@
 
 </script>
 
-<style>
+<style scoped>
+  .postItem {
+    display: flex;
+    flex-direction: column;
+    height: 74px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #d5dbdb;
+    justify-content: space-between;
+  }
 
+  .postItem > .title {
+    color: #2c3e50;
+    font-size: 16px;
+    line-height: 1.5;
+    height: 25px;
+    margin: 0px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .postItem > .content {
+    display: flex;
+    margin-top: 10px;
+    height: 40px;
+    font-size: 12px;
+    color: #34495e;
+    font-family: "Helvetica-Neue", "Helvetica", Arial, sans-serif;
+    overflow: hidden;
+
+  }
+
+  .content > .avatar {
+    flex-basis: 40px;
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+  }
+
+  .content > .info{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    height: 40px;
+  }
+
+  .info > .detail{
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    height: 20px;
+  }
+
+
+  .info > .time{
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    height: 20px;
+  }
 </style>
