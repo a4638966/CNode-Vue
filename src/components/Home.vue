@@ -5,6 +5,7 @@
       :topicList="topicList"
       @topLoading="topLoadingHandler"
       @bottomLoading="bottomLoadingHandler"
+      @click="topicItemClickHandler"
     />
     <mt-tabbar v-model="tab" fixed>
       <mt-tab-item id='all'>
@@ -59,10 +60,10 @@
       }
     },
     methods: {
-      ...mapMutations('topic',[
+      ...mapMutations('topic', [
         'changeTab'
       ]),
-      topLoadingHandler: async function(cb){
+      topLoadingHandler: async function (cb) {
         const data = await getTopicsList(0, this.tab, this.limit, this.mdrender);
         this.topicList = [...data.data];
         cb();
@@ -71,32 +72,35 @@
         const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
         this.topicList.push(...data.data);
         cb();
+      },
+      topicItemClickHandler: function ({id}) {
+        this.$router.push({ name: 'topic', params: { id }})
       }
     },
     computed: {
       page: function () {
         return this.topicList.length;
       },
-      ...mapState('topic',{
+      ...mapState('topic', {
         limit: state => state.limit,
         mdrender: state => state.mdrender
       })
     },
     watch: {
-      tab: async function (){
+      tab: async function () {
         const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
-        if(data.success){
+        if (data.success) {
           this.topicList = data.data;
-        }else {
+        } else {
           console.log('出错了');
         }
       }
     },
     beforeMount: async function () {
       const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
-      if(data.success){
+      if (data.success) {
         this.topicList = data.data;
-      }else {
+      } else {
         console.log('出错了');
       }
     }

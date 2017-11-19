@@ -1,5 +1,5 @@
 <template>
-  <div class="postItem">
+  <div class="postItem" @click="itemClickHandler">
     <h3 class="title">{{title}}</h3>
     <div class="content">
       <img class="avatar" :src="author_url"/>
@@ -60,6 +60,13 @@
         }else {
           return this.author.avatar_url;
         }
+      }
+    },
+    methods: {
+      itemClickHandler: function () {
+        this.$emit('itemClick', {
+          id: this.id
+        });
       }
     }
   }

@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import {get, post} from '../utils'
 
 
@@ -14,6 +15,16 @@ function getTopicsList(page, tab, limit = 20, mdrender = false) {
   return get(url);
 }
 
+
+function getTopicDetail(id, accesstoken) {
+  let url = `https://cnodejs.org/api/v1/topic/${id}?mdrender=true`;
+  if(!_.isNil(accesstoken)){
+    url += `&accesstoken=${accesstoken}`
+  }
+  return get(url);
+}
+
 export {
-  getTopicsList
+  getTopicsList,
+  getTopicDetail
 }

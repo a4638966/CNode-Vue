@@ -18,6 +18,7 @@
           :create_at="item.create_at"
           :last_reply_at="item.last_reply_at"
           :author="item.author"
+          @itemClick="itemClickHandler"
         />
         <p v-show="bottomLoadingTip" class="page-infinite-loading">
           <mt-spinner type="triple-bounce"></mt-spinner>
@@ -69,6 +70,11 @@
             self.bottomLoadingTip = false;
           });
         }
+      },
+      itemClickHandler: function ({id}) {
+        this.$emit('click',{
+          id
+        });
       }
     },
     watch: {
