@@ -24,7 +24,13 @@ function getTopicDetail(id, accesstoken) {
   return get(url);
 }
 
+function getUserInfo(loginname) {
+  let url = `https://cnodejs.org/api/v1/user/${loginname}`;
+  return get(url);
+}
+
 export {
+  getUserInfo,
   getTopicsList,
   getTopicDetail
 }

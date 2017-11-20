@@ -1,6 +1,8 @@
 <template>
   <div>
-    <mt-header title="首页" fixed></mt-header>
+    <mt-header title="首页" fixed>
+      <icon name="category" type="class" slot="left" :style="{fontSize: '25px'}"/>
+    </mt-header>
     <topic-list
       :key="tab"
       :topicList="topicList"

@@ -2,7 +2,7 @@
   <div class="postItem" @click="itemClickHandler">
     <h3 class="title">{{title}}</h3>
     <div class="content">
-      <img class="avatar" :src="author_url"/>
+      <img class="avatar" :src="author_url" @click="avatarHandler"/>
       <div class="info">
         <div class="detail">
           <span>{{author_name}}</span>
@@ -67,6 +67,10 @@
         this.$emit('itemClick', {
           id: this.id
         });
+      },
+      avatarHandler: function (event) {
+        event.stopPropagation();
+        this.$router.push({ name: 'user', params: { loginname: this.author.loginname}})
       }
     }
   }

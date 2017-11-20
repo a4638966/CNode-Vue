@@ -1,7 +1,7 @@
 <template>
     <div class="comment">
       <div class="profile">
-        <img class="comment-author" :src="author.avatar_url">
+        <img class="comment-author" :src="author.avatar_url" @click="avatarHandler"/>
         <div class="message">
           <span class="name">{{author.loginname}}</span>
           <span class="time">发布于:{{create_time}}</span>
@@ -35,6 +35,12 @@
     computed: {
       create_time: function () {
         return moment(this.create_at).fromNow();
+      }
+    },
+    methods: {
+      avatarHandler: function (event) {
+        event.stopPropagation();
+        this.$router.push({ name: 'user', params: { loginname: this.author.loginname}})
       }
     }
   }

@@ -8,7 +8,7 @@
     <div v-if="!loading" id="topicDetail">
       <h2 class="title">{{title}}</h2>
       <div class="profile">
-        <img class="avatar" :src="author.avatar_url"/>
+        <img class="avatar" :src="author.avatar_url" @click="avatarHandler" />
         <div class="author">
           <span>{{author.loginname}}</span>
           <span>发布于:{{create_time}}</span>
@@ -76,6 +76,12 @@
       }
 
     },
+    methods: {
+      avatarHandler: function (event) {
+        event.stopPropagation();
+        this.$router.push({ name: 'user', params: { loginname: this.author.loginname}})
+      }
+    },
     beforeMount: async function () {
       Indicator.open({
         text: '加载中...',
@@ -83,7 +89,6 @@
       });
       const data = await getTopicDetail(this.id);
       if (data.success) {
-        console.log('data: ', data.data)
         this.loading = false;
         Indicator.close();
         Object.keys(data.data).forEach((key) => {
