@@ -18,7 +18,17 @@
           <span>{{visit_count}}次阅读</span>
         </div>
       </div>
-      <div v-html="content" class="markdown-body"></div>
+      <div v-html="content" class="markdown-body content"></div>
+      <topic-comment v-for="comment in replies"
+                     :id="comment.id"
+                     :key="comment.id"
+                     :author="comment.author"
+                     :create_at="comment.create_at"
+                     :is_uped="comment.is_uped"
+                     :reply_id="comment.reply_id"
+                     :ups="comment.ups"
+                     :content="comment.content"
+      />
     </div>
   </div>
 </template>
@@ -26,6 +36,7 @@
 <script>
   import {Header, Button, Indicator} from 'mint-ui';
   import moment from 'moment';
+  import Comment from './Comment.vue'
   import {getTopicDetail} from '../../api/index';
 
   import 'github-markdown-css'
@@ -34,7 +45,8 @@
     name: 'Topic',
     components: {
       'mt-header': Header,
-      'mt-button': Button
+      'mt-button': Button,
+      'topic-comment': Comment
     },
     data: function () {
       return {
@@ -100,7 +112,7 @@
 
   #topicDetail > .profile {
     height: 44px;
-    margin: 0px;
+    margin: 0px 0px 10px 0px;
     display: flex;
     justify-content: space-around;
     color: #34495e;
@@ -153,6 +165,10 @@
 
   .noFav {
     background-color: #80bd01;
+  }
+
+  #topicDetail > .content{
+    border-bottom: 1px solid #d5dbdb;
   }
 
 </style>

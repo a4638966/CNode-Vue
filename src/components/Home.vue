@@ -2,6 +2,7 @@
   <div>
     <mt-header title="首页" fixed></mt-header>
     <topic-list
+      :key="tab"
       :topicList="topicList"
       @topLoading="topLoadingHandler"
       @bottomLoading="bottomLoadingHandler"
@@ -88,7 +89,7 @@
     },
     watch: {
       tab: async function () {
-        const data = await getTopicsList(this.page, this.tab, this.limit, this.mdrender);
+        const data = await getTopicsList(0, this.tab, this.limit, this.mdrender);
         if (data.success) {
           this.topicList = data.data;
         } else {

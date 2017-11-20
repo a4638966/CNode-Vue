@@ -11,6 +11,7 @@
       >
         <topic-list-item
           v-for="item in topicList"
+          :key="item.id"
           :id="item.id"
           :title="item.title"
           :reply_count="item.reply_count"
