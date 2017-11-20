@@ -10,28 +10,23 @@
     />
     <mt-tabbar v-model="tab" fixed>
       <mt-tab-item id='all'>
-        <img v-if="tab === 'all'" slot="icon" src="../assets/all_active.png">
-        <img slot="icon" src="../assets/all.png" v-else>
+        <icon name="all" type="class" class="icon-font" slot="icon"></icon>
         全部
       </mt-tab-item>
       <mt-tab-item id="good">
-        <img v-if="tab === 'good'" slot="icon" src="../assets/good_active.png">
-        <img slot="icon" src="../assets/good.png" v-else>
+        <icon name="good" type="class" class="icon-font" slot="icon"></icon>
         精华
       </mt-tab-item>
       <mt-tab-item id="share">
-        <img v-if="tab === 'share'" slot="icon" src="../assets/share_active.png">
-        <img slot="icon" src="../assets/share.png" v-else>
+        <icon name="share" type="class" class="icon-font" slot="icon"></icon>
         分享
       </mt-tab-item>
       <mt-tab-item id="ask">
-        <img v-if="tab === 'ask'" slot="icon" src="../assets/ask_active.png">
-        <img slot="icon" src="../assets/ask.png" v-else>
+        <icon name="ask" type="class" class="icon-font" slot="icon"></icon>
         问答
       </mt-tab-item>
       <mt-tab-item id="job">
-        <img v-if="tab === 'job'" slot="icon" src="../assets/job_active.png">
-        <img slot="icon" src="../assets/job.png" v-else>
+        <icon name="job" type="class" class="icon-font" slot="icon"></icon>
         招聘
       </mt-tab-item>
     </mt-tabbar>
@@ -42,12 +37,15 @@
   import {mapState, mapMutations} from 'vuex';
   import {Header, Tabbar, TabItem, Button, Indicator} from 'mint-ui';
   import TopicList from './TopicList.vue';
-  import {getTopicsList} from '../api'
+  import {getTopicsList} from '../api';
   import {TAB} from '../constant';
+  import '../assets/iconfont.css'
+  import Icon from "../../node_modules/vue-icon-font/src/IconFont.vue";
 
   export default {
     name: 'Home',
     components: {
+      Icon,
       'mt-header': Header,
       'mt-tabbar': Tabbar,
       'mt-tab-item': TabItem,
@@ -107,3 +105,9 @@
     }
   }
 </script>
+
+<style>
+  .icon-font {
+    font-size: 24px;
+  }
+</style>
