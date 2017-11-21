@@ -12,7 +12,8 @@
           <span>发布于:{{create_time}}</span>
         </div>
         <div class="flow">
-          <span :class="{favorite: true, fav: is_collect, noFav: !is_collect}">{{isFavorite}}</span>
+          <span :class="{favorite: true, fav: is_collect, noFav: !is_collect}"
+                @click="favoriteHandler">{{isFavorite}}</span>
           <span>{{visit_count}}次阅读</span>
         </div>
       </div>
@@ -26,16 +27,19 @@
                      :reply_id="comment.reply_id"
                      :ups="comment.ups"
                      :content="comment.content"
+                     @good="goodHandler"
       ></topic-comment>
     </div>
   </div>
 </template>
 
 <script>
-  import {Header, Button, Indicator} from 'mint-ui';
+  import {mapState} from 'vuex'
+  import {Header, Button, Indicator, Toast} from 'mint-ui';
   import moment from 'moment';
-  import Comment from './Comment.vue'
-  import {getTopicDetail} from '../../api/index';
+  import Comment from './Comment.vue';
+  import {GOODTYPE} from '../../constant'
+  import {getTopicDetail, collectTopic, deCollectTopic, upComment} from '../../api/index';
 
   import 'github-markdown-css'
 
@@ -66,18 +70,72 @@
       }
     },
     computed: {
+      ...mapState('login', {
+        login: state => state.login,
+        accesstoken: state => state.accesstoken,
+        login_id: state => state.id
+      }),
       create_time: function () {
         return moment(this.create_at).fromNow()
       },
       isFavorite: function () {
         return this.is_collect ? '取消收藏' : '收藏'
       }
-
     },
     methods: {
-      avatarHandler: function (event) {
+      avatarHandler(event) {
         event.stopPropagation();
         this.$router.push({name: 'user', params: {loginname: this.author.loginname}})
+      },
+      async favoriteHandler() {
+        if (this.verityLogin()) {
+          let data = null;
+          let message = null;
+          if (this.is_collect) {
+            data = await deCollectTopic(this.id, this.accesstoken);
+          } else {
+            data = await collectTopic(this.id, this.accesstoken);
+          }
+          if (data.success) {
+            this.is_collect = !this.is_collect;
+            message = '操作成功';
+          } else {
+            message = '出错了';
+          }
+          Toast({
+            message,
+            duration: 2000
+          });
+        }
+      },
+      async goodHandler(id) {
+        if (this.verityLogin()) {
+          const data = await upComment(id, this.accesstoken);
+          if (data.success) {
+            const index = this.replies.findIndex((val) => val.id === id);
+            this.replies[index].is_uped = !this.replies[index].is_uped;
+            if (data.action === GOODTYPE.UP) {
+              this.replies[index].ups.push(this.login_id)
+            } else {
+              const upIndex = this.replies[index].ups.indexOf(this.login_id);
+              this.replies[index].ups.splice(upIndex,1)
+
+            }
+          } else {
+            Toast({
+              message: '出错了'
+            })
+          }
+        }
+      },
+      verityLogin: function () {
+        if (this.login === false) {
+          this.$router.push({
+            name: 'login'
+          });
+          return false;
+        }
+        return true;
       }
     },
     beforeMount: async function () {
@@ -85,7 +143,8 @@
         text: '加载中...',
         spinnerType: 'snake'
       });
-      const data = await getTopicDetail(this.id);
+      const accesstoken = this.login ? this.accesstoken : null;
+      const data = await getTopicDetail(this.id, accesstoken);
       if (data.success) {
         this.loading = false;
         Indicator.close();

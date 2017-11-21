@@ -22,7 +22,7 @@
     name: 'Login',
     data: function () {
       return {
-        accesstoken: ''
+        accesstoken: 'f46e2ae0-1ae3-4640-9219-5a6db1263e07'
       }
     },
     components: {
@@ -51,7 +51,10 @@
             message: '登录成功',
             duration: 2000
           });
-          this.updateLogin(data);
+          this.updateLogin({
+            ...data,
+            accesstoken: this.accesstoken
+          });
           this.$router.go(-1);
         }else{
           Toast({

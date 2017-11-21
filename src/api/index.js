@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import {get, post} from '../utils'
 
-
 /**
  * 获得topicList
  * @param page
@@ -18,7 +17,7 @@ function getTopicsList(page, tab, limit = 20, mdrender = false) {
 
 function getTopicDetail(id, accesstoken) {
   let url = `https://cnodejs.org/api/v1/topic/${id}?mdrender=true`;
-  if(!_.isNil(accesstoken)){
+  if (!_.isNil(accesstoken)) {
     url += `&accesstoken=${accesstoken}`
   }
   return get(url);
@@ -31,9 +30,9 @@ function getUserInfo(loginname) {
 
 function getUserCollect(loginname) {
   let url = `https://cnodejs.org/api/v1/topic_collect/${loginname}`;
-  return get(url).then((data)=>{
-    if(data.success){
-      return data.data.map((item)=>({
+  return get(url).then((data) => {
+    if (data.success) {
+      return data.data.map((item) => ({
         id: item.id,
         author: item.author,
         title: item.title,
@@ -43,19 +42,44 @@ function getUserCollect(loginname) {
   });
 }
 
-function verifyUserToken(accessToken){
+function verifyUserToken(accessToken) {
   let url = `https://cnodejs.org/api/v1/accessToken`;
-
   return post(url, {
     accesstoken: accessToken
-  })
-
+  });
 }
+
+function collectTopic(topic_id, accesstoken) {
+  let url = `https://cnodejs.org/api/v1/topic_collect/collect `;
+  return post(url, {
+    topic_id,
+    accesstoken
+  });
+}
+
+function deCollectTopic(topic_id, accesstoken) {
+  let url = `https://cnodejs.org/api/v1/topic_collect/de_collect `;
+  return post(url, {
+    topic_id,
+    accesstoken
+  });
+}
+
+function upComment(reply_id, accesstoken) {
+  let url = `https://cnodejs.org/api/v1/reply/${reply_id}/ups`;
+  return post(url, {
+    accesstoken
+  });
+}
+
 
 export {
   getUserInfo,
   getUserCollect,
   getTopicsList,
   getTopicDetail,
-  verifyUserToken
+  verifyUserToken,
+  collectTopic,
+  deCollectTopic,
+  upComment
 }

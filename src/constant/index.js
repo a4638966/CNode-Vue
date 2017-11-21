@@ -8,7 +8,13 @@ const TAB = {
   SHARE: 'share'
 };
 
+const GOODTYPE = {
+  UP: 'up',
+  DOWN: 'down'
+}
+
 export {
   TAB,
-  MUTATION_TYPES
+  MUTATION_TYPES,
+  GOODTYPE
 }
