@@ -3,7 +3,8 @@ import Router from 'vue-router';
 
 import Home from '../components/Home.vue';
 import Topic from '../components/Topic';
-import User from '../components/User'
+import User from '../components/User';
+import Login from '../components/Login.vue';
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/user/:loginname',
       name: 'user',
       component: User
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ]
 })

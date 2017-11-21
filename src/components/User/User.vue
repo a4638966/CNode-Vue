@@ -17,6 +17,7 @@
       <mt-navbar v-model="selected">
         <mt-tab-item :id="1">最近发布</mt-tab-item>
         <mt-tab-item :id="2">最近回复</mt-tab-item>
+        <mt-tab-item :id="3">收藏</mt-tab-item>
       </mt-navbar>
       <mt-tab-container v-model="selected">
         <mt-tab-container-item :id="1">
@@ -27,6 +28,11 @@
             {{reply.title}}
           </div>
         </mt-tab-container-item>
+        <mt-tab-container-item :id="3">
+          <div v-for="collect in collects" class="contentItem" @click.stop="itemClickHandler(collect.id)">
+            {{collect.title}}
+          </div>
+        </mt-tab-container-item>
       </mt-tab-container>
     </div>
   </div>
@@ -35,7 +41,7 @@
 
 <script>
   import {Header, Button, Indicator, Navbar, TabItem, TabContainer, TabContainerItem, Cell} from 'mint-ui';
-  import {getUserInfo} from '../../api';
+  import {getUserInfo, getUserCollect} from '../../api';
   import moment from 'moment';
 
   export default {
@@ -59,7 +65,8 @@
         create_at: '',
         score: 0,
         recent_topics: [],
-        recent_replies: []
+        recent_replies: [],
+        collects: [],
       }
     },
     computed: {
@@ -72,21 +79,22 @@
         this.$router.push({name: 'topic', params: {id}})
       }
     },
-    beforeMount: async function () {
+    beforeMount: function () {
       Indicator.open({
         text: '加载中...',
         spinnerType: 'snake'
       });
 
-      const data = await getUserInfo(this.loginname);
-      console.log('data: ', data)
-      if (data.success) {
-        this.loading = false;
-        Indicator.close();
-        Object.keys(data.data).forEach((key) => {
-          this[key] = data.data[key];
-        });
-      }
+      Promise.all([getUserInfo(this.loginname), getUserCollect(this.loginname)]).then(([data, collects])=>{
+        if (data.success) {
+          this.loading = false;
+          Indicator.close();
+          Object.keys(data.data).forEach((key) => {
+            this[key] = data.data[key];
+          });
+        }
+        this.collects = collects;
+      });
     }
   }
 </script>

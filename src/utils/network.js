@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch'
+
 export const get = (url) =>{
   return fetch(url)
     .then(res => {
@@ -15,7 +17,6 @@ export const get = (url) =>{
 export const post = (url, body)=>{
   const fetchOptions = {
     method: 'POST',
-    credentials: 'include',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

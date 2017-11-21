@@ -29,8 +29,33 @@ function getUserInfo(loginname) {
   return get(url);
 }
 
+function getUserCollect(loginname) {
+  let url = `https://cnodejs.org/api/v1/topic_collect/${loginname}`;
+  return get(url).then((data)=>{
+    if(data.success){
+      return data.data.map((item)=>({
+        id: item.id,
+        author: item.author,
+        title: item.title,
+        last_reply_at: item.last_reply_at
+      }));
+    }
+  });
+}
+
+function verifyUserToken(accessToken){
+  let url = `https://cnodejs.org/api/v1/accessToken`;
+
+  return post(url, {
+    accesstoken: accessToken
+  })
+
+}
+
 export {
   getUserInfo,
+  getUserCollect,
   getTopicsList,
-  getTopicDetail
+  getTopicDetail,
+  verifyUserToken
 }
