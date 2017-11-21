@@ -1,14 +1,12 @@
 <template>
   <div>
     <mt-header title="用户" fixed>
-      <router-link to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
+      <mt-button slot="left" icon="back" @click="$router.go(-1)">返回</mt-button>
     </mt-header>
     <div v-show="!loading">
       <div class="userDetail">
         <div class="userAvatar">
-          <img class="avatar" :src="avatar_url" />
+          <img class="avatar" :src="avatar_url"/>
           <span class="userName">{{loginname}}</span>
           <div class="detail">
             <span>积分:{{score}}</span>
@@ -16,26 +14,45 @@
           </div>
         </div>
       </div>
+      <mt-navbar v-model="selected">
+        <mt-tab-item :id="1">最近发布</mt-tab-item>
+        <mt-tab-item :id="2">最近回复</mt-tab-item>
+      </mt-navbar>
+      <mt-tab-container v-model="selected">
+        <mt-tab-container-item :id="1">
+          <div v-for="topic in recent_topics" class="contentItem" @click.stop="itemClickHandler(topic.id)">{{topic.title}}</div>
+        </mt-tab-container-item>
+        <mt-tab-container-item :id="2">
+          <div v-for="reply in recent_replies" class="contentItem" @click.stop="itemClickHandler(reply.id)">
+            {{reply.title}}
+          </div>
+        </mt-tab-container-item>
+      </mt-tab-container>
     </div>
   </div>
 
 </template>
 
 <script>
-  import {Header, Button, Indicator} from 'mint-ui';
+  import {Header, Button, Indicator, Navbar, TabItem, TabContainer, TabContainerItem, Cell} from 'mint-ui';
   import {getUserInfo} from '../../api';
   import moment from 'moment';
-
 
   export default {
     name: 'User',
     components: {
       "mt-header": Header,
-      "mt-button": Button
+      "mt-button": Button,
+      "mt-navbar": Navbar,
+      "mt-tab-item": TabItem,
+      "mt-tab-container": TabContainer,
+      "mt-tab-container-item": TabContainerItem,
+      "mt-cell": Cell
     },
     data: function () {
       return {
         loading: true,
+        selected: 1,
         loginname: this.$route.params.loginname,
         avatar_url: '',
         githubUsername: '',
@@ -48,6 +65,11 @@
     computed: {
       create_time: function () {
         return moment(this.create_at).fromNow();
+      }
+    },
+    methods: {
+      itemClickHandler: function (id) {
+        this.$router.push({name: 'topic', params: {id}})
       }
     },
     beforeMount: async function () {
@@ -100,6 +122,16 @@
     flex: 1;
     text-align: center;
     font-size: smaller;
+  }
+
+  .contentItem {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #d5dbdb;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0px 10px 0px 10px;
   }
 
 </style>

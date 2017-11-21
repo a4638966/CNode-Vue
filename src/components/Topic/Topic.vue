@@ -1,14 +1,12 @@
 <template>
   <div>
     <mt-header title="详情" fixed>
-      <router-link to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
+      <mt-button slot="left" icon="back" @click="$router.go(-1)">返回</mt-button>
     </mt-header>
     <div v-if="!loading" id="topicDetail">
       <h2 class="title">{{title}}</h2>
       <div class="profile">
-        <img class="avatar" :src="author.avatar_url" @click="avatarHandler" />
+        <img class="avatar" :src="author.avatar_url" @click="avatarHandler"/>
         <div class="author">
           <span>{{author.loginname}}</span>
           <span>发布于:{{create_time}}</span>
@@ -28,7 +26,7 @@
                      :reply_id="comment.reply_id"
                      :ups="comment.ups"
                      :content="comment.content"
-      />
+      ></topic-comment>
     </div>
   </div>
 </template>
@@ -79,7 +77,7 @@
     methods: {
       avatarHandler: function (event) {
         event.stopPropagation();
-        this.$router.push({ name: 'user', params: { loginname: this.author.loginname}})
+        this.$router.push({name: 'user', params: {loginname: this.author.loginname}})
       }
     },
     beforeMount: async function () {
@@ -172,7 +170,7 @@
     background-color: #80bd01;
   }
 
-  #topicDetail > .content{
+  #topicDetail > .content {
     border-bottom: 1px solid #d5dbdb;
   }
 
