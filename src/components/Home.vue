@@ -1,7 +1,12 @@
 <template>
   <div>
     <mt-header title="首页" fixed>
-      <icon name="category" type="class" slot="left" :style="{fontSize: '25px'}"/>
+      <div v-if="!login" slot="right" @click="loginClickHandler">
+        <icon name="login" type="class" :style="{fontSize: '24px'}"/>
+      </div>
+      <div v-else slot="right" @click="messageClickHandler">
+        <icon name="message" type="class" :style="{fontSize: '24px'}"/>
+      </div>
     </mt-header>
     <topic-list
       :key="tab"
@@ -75,7 +80,13 @@
         cb();
       },
       topicItemClickHandler: function ({id}) {
-        this.$router.push({ name: 'topic', params: { id }})
+        this.$router.push({name: 'topic', params: {id}})
+      },
+      loginClickHandler: function () {
+        this.$router.push({name: 'login'})
+      },
+      messageClickHandler: function () {
+        this.$router.push({name: 'message'})
       }
     },
     computed: {
@@ -85,7 +96,8 @@
       ...mapState('topic', {
         limit: state => state.limit,
         mdrender: state => state.mdrender
-      })
+      }),
+      ...mapState('login', ['login'])
     },
     watch: {
       tab: async function () {

@@ -5,6 +5,7 @@ import Home from '../components/Home.vue';
 import Topic from '../components/Topic';
 import User from '../components/User';
 import Login from '../components/Login.vue';
+import Message from '../components/Message/Message.vue'
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/message',
+      name: 'message',
+      component: Message
     }
   ]
 })

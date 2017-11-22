@@ -11,10 +11,16 @@ const TAB = {
 const GOODTYPE = {
   UP: 'up',
   DOWN: 'down'
-}
+};
+
+const MESSAGE_TYPE = {
+  AT: 'at',
+  REPLY:"reply"
+};
 
 export {
   TAB,
   MUTATION_TYPES,
-  GOODTYPE
+  GOODTYPE,
+  MESSAGE_TYPE
 }

@@ -72,6 +72,18 @@ function upComment(reply_id, accesstoken) {
   });
 }
 
+function getMessages(accesstoken, mdrender = true) {
+  let url = `https://cnodejs.org/api/v1/messages?accesstoken=${accesstoken}&mdrender=${mdrender}`;
+  return get(url);
+}
+
+function markOneMessage(msg_id, accesstoken) {
+  let url = `https://cnodejs.org/api/v1/message/mark_one/${msg_id}`;
+  return post(url, {
+    accesstoken
+  });
+}
+
 
 export {
   getUserInfo,
@@ -81,5 +93,7 @@ export {
   verifyUserToken,
   collectTopic,
   deCollectTopic,
-  upComment
-}
+  upComment,
+  getMessages,
+  markOneMessage
+};

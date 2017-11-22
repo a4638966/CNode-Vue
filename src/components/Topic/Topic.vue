@@ -104,7 +104,8 @@
           }
           Toast({
             message,
-            duration: 2000
+            duration: 2000,
+            position: 'bottom'
           });
         }
       },
@@ -123,7 +124,8 @@
             }
           } else {
             Toast({
-              message: '出错了'
+              message: '出错了',
+              position: 'bottom'
             })
           }
         }

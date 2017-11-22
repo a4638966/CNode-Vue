@@ -41,7 +41,8 @@
         if(this.accesstoken == ''){
           Toast({
             message: 'accessToken 不能为空',
-            duration: 2000
+            duration: 2000,
+            position: 'bottom'
           });
           return;
         }
@@ -49,7 +50,8 @@
         if(success){
           Toast({
             message: '登录成功',
-            duration: 2000
+            duration: 2000,
+            position: 'bottom'
           });
           this.updateLogin({
             ...data,
@@ -59,7 +61,8 @@
         }else{
           Toast({
             message: '密码错误',
-            duration: 2000
+            duration: 2000,
+            position: 'bottom'
           });
         }
       }
