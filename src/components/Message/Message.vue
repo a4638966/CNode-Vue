@@ -1,6 +1,8 @@
 <template>
   <div>
-    <mt-header title="消息" fixed></mt-header>
+    <mt-header title="消息" fixed>
+      <mt-button slot="left" icon="back" @click="$router.go(-1)">返回</mt-button>
+    </mt-header>
     <div id="message">
       <mt-navbar v-model="selected">
         <mt-tab-item :id="1">未读信息</mt-tab-item>
@@ -9,6 +11,7 @@
       <mt-tab-container v-model="selected" v-show="!loading">
         <mt-tab-container-item :id="1">
           <message-item v-for="message in hasnot_read_messages"
+                        :key="message.id"
                         :author="message.author"
                         :create_at="message.create_at"
                         :has_read="message.has_read"
@@ -21,6 +24,7 @@
         </mt-tab-container-item>
         <mt-tab-container-item :id="2">
           <message-item v-for="message in has_read_messages"
+                        :key="message.id"
                         :author="message.author"
                         :create_at="message.create_at"
                         :has_read="message.has_read"
@@ -39,7 +43,7 @@
 <script>
 
   import {mapState} from 'vuex';
-  import {Navbar, TabItem, Header, TabContainer, TabContainerItem, Indicator, Toast} from 'mint-ui';
+  import {Navbar, TabItem, Header, TabContainer, TabContainerItem, Indicator, Toast, Button} from 'mint-ui';
   import {getMessages} from '../../api/index';
   import MessageItem from './MessageItem.vue'
 
@@ -51,7 +55,8 @@
       'mt-header': Header,
       'mt-tab-container': TabContainer,
       'mt-tab-container-item': TabContainerItem,
-      'message-item': MessageItem
+      'message-item': MessageItem,
+      'mt-button': Button
     },
     data: function () {
       return {

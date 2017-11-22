@@ -1,6 +1,9 @@
 <template>
   <div>
     <mt-header title="首页" fixed>
+      <div v-if="login" slot="left" @click="userClickHandler">
+        <icon name="user" type="class" :style="{fontSize: '24px'}"/>
+      </div>
       <div v-if="!login" slot="right" @click="loginClickHandler">
         <icon name="login" type="class" :style="{fontSize: '24px'}"/>
       </div>
@@ -87,6 +90,9 @@
       },
       messageClickHandler: function () {
         this.$router.push({name: 'message'})
+      },
+      userClickHandler: function () {
+        this.$router.push({name: 'user', params: {loginname: this.loginname}});
       }
     },
     computed: {
@@ -97,7 +103,10 @@
         limit: state => state.limit,
         mdrender: state => state.mdrender
       }),
-      ...mapState('login', ['login'])
+      ...mapState('login', {
+        'login': state => state.login,
+        'loginname': state => state.loginname
+      })
     },
     watch: {
       tab: async function () {

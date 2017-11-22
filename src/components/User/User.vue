@@ -2,6 +2,9 @@
   <div>
     <mt-header title="用户" fixed>
       <mt-button slot="left" icon="back" @click="$router.go(-1)">返回</mt-button>
+      <div v-if="show_loginout" slot="right" @click="loginOutHandler">
+        <icon name="loginout" type="class" :style="{fontSize: '24px'}"/>
+      </div>
     </mt-header>
     <div v-show="!loading">
       <div class="userDetail">
@@ -40,8 +43,10 @@
 </template>
 
 <script>
+  import {mapMutations} from 'vuex';
   import {Header, Button, Indicator, Navbar, TabItem, TabContainer, TabContainerItem, Cell} from 'mint-ui';
   import {getUserInfo, getUserCollect} from '../../api';
+  import {MUTATION_TYPES} from '../../constant'
   import moment from 'moment';
 
   export default {
@@ -72,11 +77,20 @@
     computed: {
       create_time: function () {
         return moment(this.create_at).fromNow();
+      },
+      show_loginout: function () {
+        return this.$store.state.login.login && this.loginname === this.$store.state.login.loginname;
       }
     },
     methods: {
+      ...mapMutations('login', {
+        loginOut: MUTATION_TYPES.USER_LOGINOUT
+      }),
       itemClickHandler: function (id) {
         this.$router.push({name: 'topic', params: {id}})
+      },
+      loginOutHandler: function () {
+        this.loginOut();
       }
     },
     beforeMount: function () {

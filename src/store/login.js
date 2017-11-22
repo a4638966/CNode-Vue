@@ -16,6 +16,13 @@ const login = {
       state.avatar_url = avatar_url;
       state.id = id;
       state.accesstoken = accesstoken;
+    },
+    [MUTATION_TYPES.USER_LOGINOUT]: function (state) {
+      state.login = false;
+      state.loginname = '';
+      state.avatar_url = '';
+      state.id = '';
+      state.accesstoken = '';
     }
   },
   actions: {
