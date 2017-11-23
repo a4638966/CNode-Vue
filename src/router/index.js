@@ -5,7 +5,8 @@ import Home from '../components/Home.vue';
 import Topic from '../components/Topic';
 import User from '../components/User';
 import Login from '../components/Login.vue';
-import Message from '../components/Message/Message.vue'
+import Message from '../components/Message/';
+import Reply from '../components/Reply.vue';
 
 Vue.use(Router);
 
@@ -35,6 +36,16 @@ export default new Router({
       path: '/message',
       name: 'message',
       component: Message
+    },
+    {
+      path: '/reply/:topic_id',
+      name: 'replyTopic',
+      component: Reply
+    },
+    {
+      path: '/reply/:topic_id/:reply_id',
+      name: 'replyComment',
+      component: Reply
     }
   ]
 })

@@ -84,6 +84,15 @@ function markOneMessage(msg_id, accesstoken) {
   });
 }
 
+function postReply(topic_id, accesstoken, content, reply_id) {
+  let url = `https://cnodejs.org/api/v1/topic/${topic_id}/replies`;
+  return post(url, {
+    accesstoken,
+    content,
+    reply_id
+  });
+}
+
 
 export {
   getUserInfo,
@@ -95,5 +104,6 @@ export {
   deCollectTopic,
   upComment,
   getMessages,
-  markOneMessage
+  markOneMessage,
+  postReply
 };

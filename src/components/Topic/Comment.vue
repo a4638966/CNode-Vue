@@ -7,11 +7,13 @@
         <span class="time">发布于:{{create_time}}</span>
       </div>
       <div class="operator">
-        <div @click.name="goodHandler">
+        <div @click.stop="goodHandler">
           <icon name="good" type="class" :class="{icon: true, active: is_uped}"/>
           <span :style="{'font-size': '14px'}">{{goodNumber}}</span>
         </div>
-        <icon name="comment" type="class" class="icon"/>
+        <div @click.stop="commentHandler">
+          <icon name="comment" type="class" class="icon"/>
+        </div>
       </div>
     </div>
     <div class="comment-content">
@@ -36,7 +38,8 @@
       id: String,
       is_uped: Boolean,
       reply_id: String,
-      ups: Array
+      ups: Array,
+      topic_id: String
     },
     computed: {
       create_time() {
@@ -60,8 +63,19 @@
         event.stopPropagation();
         this.$router.push({name: 'user', params: {loginname: this.author.loginname}})
       },
-      goodHandler(){
+      goodHandler() {
         this.$emit('good', this.id);
+      },
+      commentHandler(){
+        if(this.verityLogin()){
+          this.$router.push({
+            name: 'replyComment',
+            params: {
+              topic_id: this.topic_id,
+              reply_id: this.id
+            }
+          })
+        }
       }
     }
   }

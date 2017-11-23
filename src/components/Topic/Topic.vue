@@ -2,6 +2,9 @@
   <div>
     <mt-header title="详情" fixed>
       <mt-button slot="left" icon="back" @click="$router.go(-1)">返回</mt-button>
+      <div v-if="login" slot="right" @click.stop="commentHandler">
+        <icon name="comment" type="class" :style="{fontSize: '24px'}"/>
+      </div>
     </mt-header>
     <div v-if="!loading" id="topicDetail">
       <h2 class="title">{{title}}</h2>
@@ -21,6 +24,7 @@
       <topic-comment v-for="comment in replies"
                      :id="comment.id"
                      :key="comment.id"
+                     :topic_id="id"
                      :author="comment.author"
                      :create_at="comment.create_at"
                      :is_uped="comment.is_uped"
@@ -129,6 +133,14 @@
             })
           }
         }
+      },
+      commentHandler(){
+        this.$router.push({
+          name: 'replyTopic',
+          params: {
+            topic_id: this.id
+          }
+        })
       },
       verityLogin: function () {
         if (this.login === false) {

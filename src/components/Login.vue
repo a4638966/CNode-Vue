@@ -22,7 +22,7 @@
     name: 'Login',
     data: function () {
       return {
-        accesstoken: 'f46e2ae0-1ae3-4640-9219-5a6db1263e07'
+        accesstoken: ''
       }
     },
     components: {
